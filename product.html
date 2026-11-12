@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aura Nails</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="index.html"><img src="logo.png" alt="Aura Nails" width="1200" height="428"></a>
+    <div class="head-right">
+      <div class="ship-note" id="shipNote"></div>
+      <button class="cart-btn" id="openCart" aria-haspopup="dialog">Cart <span class="count" id="cartCount" data-zero="true">0</span></button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap pdp">
+  <a class="back" href="index.html" id="back">← All sets</a>
+  <div id="pdp"></div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span id="legal"></span>
+    <a id="mail" href="#"></a>
+  </div>
+</footer>
+
+<script src="products.js"></script>
+<script src="app.js"></script>
+<script>
+(function(){
+  const { $, esc, safeUrl, eur, byId, imgsOf, tintOf, drawnHTML, thumbHTML, addToCart, openCart, isAdmin } = Aura;
+
+  const params = new URLSearchParams(location.search);
+  const p = byId(params.get("id"));
+  const root = $("#pdp");
+  if (isAdmin) $("#back").href = "index.html?admin=1";
+
+  if (!p) {
+    document.title = "Set not found – " + SHOP.name;
+    root.innerHTML = `<div class="notfound"><h1 class="big" style="font-size:36px">Set not found</h1><p style="margin:12px 0 20px;color:var(--muted)">This set doesn't exist or is no longer available.</p><a class="btn" href="index.html">See all sets</a></div>`;
+    return;
+  }
+
+  document.title = p.name + " – " + SHOP.name;
+  const imgs = imgsOf(p);
+  const n = Math.max(1, imgs.length);
+  const multi = n > 1;
+
+  const slides = imgs.length
+    ? imgs.map((src, i) => `<div class="slide" role="group" aria-roledescription="slide" aria-label="Photo ${i+1} of ${n}"><img src="${esc(src)}" alt="${esc(p.name)} – photo ${i+1}" draggable="false" ${i === 0 ? "" : 'loading="lazy"'} data-fallback="${esc(p.id)}"></div>`).join("")
+    : `<div class="slide" aria-label="${esc(p.name)}">${drawnHTML(p)}</div>`;
+
+  const thumbs = multi ? imgs.map((src, i) =>
+    `<button type="button" data-i="${i}" aria-label="Show photo ${i+1}" ${i === 0 ? 'aria-current="true"' : ""}><img src="${esc(src)}" alt="" loading="lazy" data-fallback="${esc(p.id)}"></button>`).join("") : "";
+
+  const shein = safeUrl(p.shein);
+  const adminLink = (isAdmin && shein) ? `<p style="margin-top:14px"><a class="admin" href="${esc(shein)}" target="_blank" rel="noopener">Order from supplier</a></p>` : "";
+
+  root.innerHTML = `
+    <div class="pdp-grid">
+      <div class="gallery" role="region" aria-roledescription="carousel" aria-label="Photos of ${esc(p.name)}">
+        <div class="stage" style="--tint:${tintOf(p)}">
+          <div class="track" id="track" tabindex="0">${slides}</div>
+          ${multi ? `<button class="nav prev" id="prev" type="button" aria-label="Previous photo">‹</button>
+          <button class="nav next" id="next" type="button" aria-label="Next photo">›</button>
+          <div class="counter" id="counter" aria-live="polite">1 / ${n}</div>` : ""}
+        </div>
+        ${multi ? `<div class="thumbs" id="thumbs">${thumbs}</div>` : ""}
+      </div>
+      <div class="pinfo">
+        <h1>${esc(p.name)}</h1>
+        <span class="price">${eur(Number(p.price) || 0)}</span>
+        <p class="desc">${esc(p.desc)}</p>
+        ${p.details ? `<p class="details">${esc(p.details)}</p>` : ""}
+        <button class="btn" id="addBtn" type="button">Add to cart</button>
+        ${adminLink}
+        <div class="perks">
+          ${SHOP.info.map(i => `<div><strong>${esc(i.t)}</strong><span>${esc(i.d)}</span></div>`).join("")}
+        </div>
+      </div>
+    </div>`;
+
+  Aura.bindFallbacks(root);
+  $("#addBtn").addEventListener("click", () => { addToCart(p.id); openCart(); });
+
+  if (!multi) return;
+
+  /* ---------- gallery ---------- */
+  const track = $("#track"), prev = $("#prev"), next = $("#next"), counter = $("#counter");
+  const thumbBtns = [...document.querySelectorAll("#thumbs button")];
+  const smooth = matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+  let current = 0;
+
+  const index = () => Math.round(track.scrollLeft / track.clientWidth);
+  function go(i) {
+    i = Math.max(0, Math.min(n - 1, i));
+    track.scrollTo({ left: i * track.clientWidth, behavior: smooth });
+  }
+  function update() {
+    const i = Math.max(0, Math.min(n - 1, index()));
+    if (i === current && counter.dataset.ready) return;
+    current = i; counter.dataset.ready = "1";
+    counter.textContent = `${i + 1} / ${n}`;
+    prev.disabled = i === 0; next.disabled = i === n - 1;
+    thumbBtns.forEach((b, k) => { if (k === i) b.setAttribute("aria-current", "true"); else b.removeAttribute("aria-current"); });
+    const t = thumbBtns[i], strip = $("#thumbs");
+    if (t && strip) strip.scrollTo({ left: t.offsetLeft - (strip.clientWidth - t.offsetWidth) / 2, behavior: smooth });
+  }
+  track.addEventListener("scroll", update, { passive: true });
+  prev.addEventListener("click", () => go(index() - 1));
+  next.addEventListener("click", () => go(index() + 1));
+  thumbBtns.forEach(b => b.addEventListener("click", () => go(+b.dataset.i)));
+  track.addEventListener("keydown", e => {
+    if (e.key === "ArrowLeft") { e.preventDefault(); go(index() - 1); }
+    if (e.key === "ArrowRight") { e.preventDefault(); go(index() + 1); }
+  });
+  addEventListener("resize", () => { track.scrollLeft = current * track.clientWidth; });
+  update();
+})();
+</script>
+</body>
+</html>

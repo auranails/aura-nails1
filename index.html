@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aura Nails – press-on nails</title>
+<meta name="description" content="Press-on nails you apply in five minutes. Pick a set, pay by card, we ship it to you.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="banner" id="banner" hidden>Thank you! Your order is confirmed. A receipt is on its way to your inbox.</div>
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="index.html"><img src="logo.png" alt="Aura Nails" width="1200" height="428"></a>
+    <div class="head-right">
+      <div class="ship-note" id="shipNote"></div>
+      <button class="cart-btn" id="openCart" aria-haspopup="dialog">Cart <span class="count" id="cartCount" data-zero="true">0</span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <h1 class="big">Press-on nails. Done in five minutes.</h1>
+        <p id="heroSub"></p>
+        <a class="btn" href="#sets">Shop sets</a>
+      </div>
+      <div class="plate" aria-hidden="true">
+        <div class="nails shape-almond" id="heroNails"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="shop" id="sets">
+    <div class="wrap">
+      <h2>Sets</h2>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <section class="info">
+    <div class="wrap">
+      <div class="cols" id="infoCols"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span id="legal"></span>
+    <a id="mail" href="#"></a>
+  </div>
+</footer>
+
+<script src="products.js"></script>
+<script src="app.js"></script>
+<script>
+(function(){
+  const { $, esc, safeUrl, eur, imgsOf, productUrl, nailsHTML, tintOf, thumbHTML, bindFallbacks, addToCart, openCart, isAdmin } = Aura;
+
+  $("#heroSub").textContent = SHOP.heroSub;
+  $("#heroNails").innerHTML = nailsHTML(["#EB008B","#FF9FD3","#EB008B","#FF9FD3","#EB008B"]);
+  $("#infoCols").innerHTML = SHOP.info.map(i => `<div class="box"><h3>${esc(i.t)}</h3><p>${esc(i.d)}</p></div>`).join("");
+
+  const grid = $("#grid");
+  if (!PRODUCTS.length) {
+    grid.innerHTML = `<div class="empty">No sets yet. Check back soon.</div>`;
+    return;
+  }
+  grid.innerHTML = PRODUCTS.map(p => {
+    const url = productUrl(p);
+    const shein = safeUrl(p.shein);
+    const n = imgsOf(p).length;
+    const more = n > 1 ? `<span class="more">${n} photos</span>` : "";
+    const adminLink = (isAdmin && shein) ? `<a class="admin" href="${esc(shein)}" target="_blank" rel="noopener">Order from supplier</a>` : "";
+    return `<article class="card">
+      <a class="vis" href="${esc(url)}" target="_blank" rel="noopener" style="--tint:${tintOf(p)}" aria-label="View ${esc(p.name)}">${thumbHTML(p)}${more}</a>
+      <div class="body">
+        <h3><a href="${esc(url)}" target="_blank" rel="noopener">${esc(p.name)}</a></h3>
+        <div class="meta">${esc(p.desc)}</div>
+        <div class="row"><span class="price">${eur(Number(p.price) || 0)}</span>
+          <button class="btn" data-add="${esc(p.id)}" aria-label="Add ${esc(p.name)} to cart">Add to cart</button></div>
+        ${adminLink}
+      </div>
+    </article>`;
+  }).join("");
+  bindFallbacks(grid);
+
+  grid.addEventListener("click", e => {
+    const b = e.target.closest("[data-add]");
+    if (b) { addToCart(b.dataset.add); openCart(); }
+  });
+})();
+</script>
+</body>
+</html>
