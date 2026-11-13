@@ -38,8 +38,8 @@ const CHECKOUT_ENDPOINT = "/.netlify/functions/checkout";
    ===================================================================== */
 const PRODUCTS = [
   {
-    id: "cherry-gloss",
-    name: "Cherry Gloss",
+    id: "hibiscus-aura",
+    name: "Hibiscus Aura",
     price: 9.90,
     desc: "10 pcs · almond · glossy finish",
     details: "",
@@ -50,8 +50,8 @@ const PRODUCTS = [
     colors: ["#B3123F","#D6007D","#B3123F","#D6007D","#B3123F"]
   },
   {
-    id: "milk-french",
-    name: "Cikoskoo som si sama prepisala kod tu aha",
+    id: "goddess",
+    name: "Goddess",
     price: 8.90,
     desc: "10 pcs · almond · French tip",
     details: "",
@@ -63,8 +63,8 @@ const PRODUCTS = [
     tip: "#FFFFFF"
   },
   {
-    id: "lilac-chrome",
-    name: "Lilac Chrome",
+    id: "fairy-chrome",
+    name: "Fairy Chrome",
     price: 10.90,
     desc: "10 pcs · coffin · chrome effect",
     details: "",
@@ -75,8 +75,8 @@ const PRODUCTS = [
     colors: ["#B79BE0","#C9B2EA","#B79BE0","#C9B2EA","#B79BE0"]
   },
   {
-    id: "mint-short",
-    name: "Mint Short",
+    id: "hot-pink",
+    name: "Hot Pink",
     price: 7.90,
     desc: "10 pcs · short square",
     details: "",
@@ -87,8 +87,8 @@ const PRODUCTS = [
     colors: ["#9FE0C8","#7FD1B3","#9FE0C8","#7FD1B3","#9FE0C8"]
   },
   {
-    id: "baby-pink",
-    name: "Baby Pink",
+    id: "waikiki",
+    name: "Waikiki",
     price: 7.90,
     desc: "10 pcs · round · soft gloss",
     details: "",
@@ -99,8 +99,8 @@ const PRODUCTS = [
     colors: ["#F7C6D9"]
   },
   {
-    id: "black-cat",
-    name: "Black Cat",
+    id: "sakura-pink",
+    name: "Sakura Pink",
     price: 9.90,
     desc: "24 pcs · coffin · jet black",
     details: "",
@@ -111,8 +111,8 @@ const PRODUCTS = [
     colors: ["#1E1B22"]
   },
   {
-    id: "nude-almond",
-    name: "Nude Almond",
+    id: "lagoon",
+    name: "Lagoon",
     price: 8.90,
     desc: "24 pcs · almond · everyday nude",
     details: "",
