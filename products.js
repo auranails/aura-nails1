@@ -51,7 +51,7 @@ const PRODUCTS = [
   },
   {
     id: "milk-french",
-    name: "Milk French",
+    name: "Cikoskoo som si sama prepisala kod tu aha",
     price: 8.90,
     desc: "24 pcs · almond · French tip",
     details: "",
