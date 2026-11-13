@@ -66,7 +66,7 @@
   const { $, esc, safeUrl, eur, imgsOf, productUrl, nailsHTML, tintOf, thumbHTML, bindFallbacks, addToCart, openCart, isAdmin } = Aura;
 
   $("#heroSub").textContent = SHOP.heroSub;
-  $("#heroNails").innerHTML = nailsHTML(["#EB008B","#FF9FD3","#EB008B","#FF9FD3","#EB008B"]);
+  $("#heroNails").innerHTML = '<img src="thumbnail.jpg" alt="Aura Nails press-on nails" style="width:100%;max-height:420px;object-fit:cover;border-radius:32px;display:block">'; 
   $("#infoCols").innerHTML = SHOP.info.map(i => `<div class="box"><h3>${esc(i.t)}</h3><p>${esc(i.d)}</p></div>`).join("");
 
   const grid = $("#grid");
