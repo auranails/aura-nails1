@@ -3,13 +3,13 @@
 // Keep ids and prices in sync with PRODUCTS in index.html. Prices are in cents.
 
 const PRODUCTS = {
-  "cherry-gloss": { name: "Cherry Gloss", price: 990 },
-  "milk-french": { name: "Milk French", price: 890 },
-  "lilac-chrome": { name: "Lilac Chrome", price: 1090 },
-  "mint-short": { name: "Mint Short", price: 790 },
-  "baby-pink": { name: "Baby Pink", price: 790 },
-  "black-cat": { name: "Black Cat", price: 990 },
-  "nude-almond": { name: "Nude Almond", price: 890 },
+  "hibiscus-aura": { name: "Hibiscus Aura", price: 990 },
+  "goddess": { name: "Goddess", price: 890 },
+  "fairy-chrome": { name: "Fairy Chrome", price: 1090 },
+  "hot-pink": { name: "Hot Pink", price: 790 },
+  "waikiki": { name: "Waikiki", price: 790 },
+  "sakura-pink": { name: "Sakura Pink", price: 990 },
+  "lagoon": { name: "Lagoon", price: 890 },
   "ocean-blue": { name: "Ocean Blue", price: 890 },
   "sunset-ombre": { name: "Sunset Ombre", price: 1090 },
   "pearl-white": { name: "Pearl White", price: 890 },
